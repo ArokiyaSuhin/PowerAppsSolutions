@@ -1,0 +1,695 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "api": {
+          "name": "shared_sharepointonline"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "aro_sharedsharepointonline_c94ae"
+        },
+        "runtimeSource": "embedded"
+      },
+      "shared_googlesheet-1": {
+        "api": {
+          "name": "shared_googlesheet"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "aro_sharedgooglesheet_c8377"
+        },
+        "runtimeSource": "embedded"
+      },
+      "shared_commondataserviceforapps-1": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "aro_sharedcommondataserviceforapps_771af"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_an_item_is_created": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+              "table": "1a14c0ad-4b10-48af-a540-2fb8ab2ebd59"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "GetOnNewItems",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "recurrence": {
+            "interval": 1,
+            "frequency": "Minute"
+          },
+          "splitOn": "@triggerOutputs()?['body/value']",
+          "metadata": {
+            "operationMetadataId": "96514ab7-93c8-4430-b388-5ab6be90630e"
+          }
+        }
+      },
+      "actions": {
+        "Create_item": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+              "table": "9a8f03d4-f8c2-4b4b-bfa0-c2c09ff2562a",
+              "item/field_1": "@triggerBody()?['ID']",
+              "item/field_3": "@triggerBody()?['field_2']",
+              "item/field_4": "@triggerBody()?['field_3']",
+              "item/field_5": "@triggerBody()?['field_4']",
+              "item/field_6": "@triggerBody()?['field_5']",
+              "item/field_7": "@triggerBody()?['field_6']",
+              "item/field_8": "@triggerBody()?['field_7']",
+              "item/field_9": "@triggerBody()?['field_8']",
+              "item/field_10": "@triggerBody()?['field_9']",
+              "item/field_12": "@triggerBody()?['field_32']",
+              "item/field_13": "@triggerBody()?['field_33']",
+              "item/field_14": "@triggerBody()?['field_34']",
+              "item/field_15": "@{triggerBody()?['field_35']}",
+              "item/field_16": "@{triggerBody()?['field_36']}",
+              "item/field_17": "@triggerBody()?['field_37']",
+              "item/field_18": "@triggerBody()?['field_38']",
+              "item/field_19": "@triggerBody()?['field_39']",
+              "item/field_20": "@triggerBody()?['field_40']",
+              "item/field_21": "@triggerBody()?['field_41']",
+              "item/field_22": "@triggerBody()?['field_42']",
+              "item/field_23": "@triggerBody()?['field_43']",
+              "item/field_24": "@triggerBody()?['field_44']",
+              "item/field_25": "@triggerBody()?['field_45']",
+              "item/field_26": "@triggerBody()?['field_46']",
+              "item/field_27": "@triggerBody()?['Created']",
+              "item/field_28": "@triggerBody()?['field_47']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "PostItem",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "684e8f3f-b8cc-4922-bb96-e62c0ca1b941"
+          }
+        },
+        "Insert_row": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "15PbohwoAc2RvSb0Fcgud2B-SmJeQrbqOZT_ZyUy2EFs",
+              "table": "0",
+              "item/id": "@{triggerBody()?['ID']}",
+              "item/Workdate": "@triggerBody()?['field_2']",
+              "item/Supervisor": "@triggerBody()?['field_3']",
+              "item/ResourceTypr": "@triggerBody()?['field_4']",
+              "item/WorkerName": "@triggerBody()?['field_5']",
+              "item/ResourceQty": "@{triggerBody()?['field_6']}",
+              "item/ReClock": "@{triggerBody()?['field_7']}",
+              "item/ReRate": "@{triggerBody()?['field_8']}",
+              "item/ReAmount": "@{triggerBody()?['field_9']}",
+              "item/ReTotalAmount": "@{triggerBody()?['field_32']}",
+              "item/Olocation": "@triggerBody()?['field_33']",
+              "item/Ocomponent": "@triggerBody()?['field_34']",
+              "item/StChainage": "@{triggerBody()?['field_35']}",
+              "item/EndChainage": "@{triggerBody()?['field_36']}",
+              "item/Side": "@triggerBody()?['field_37']",
+              "item/TypeOfWork": "@triggerBody()?['field_38']",
+              "item/Grade": "@triggerBody()?['field_39']",
+              "item/ONumber": "@{triggerBody()?['field_40']}",
+              "item/OLength": "@{triggerBody()?['field_41']}",
+              "item/OBreadth": "@{triggerBody()?['field_42']}",
+              "item/ODepth": "@{triggerBody()?['field_43']}",
+              "item/ODia": "@triggerBody()?['field_44']",
+              "item/OWeight": "@{triggerBody()?['field_45']}",
+              "item/OQuantity": "@{triggerBody()?['field_46']}",
+              "item/Date": "@triggerBody()?['Created']",
+              "item/ODescription": "@triggerBody()?['field_47']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_googlesheet",
+              "operationId": "PostItem",
+              "connectionName": "shared_googlesheet-1"
+            }
+          },
+          "runAfter": {
+            "Create_item": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "15PbohwoAc2RvSb0Fcgud2B-SmJeQrbqOZT_ZyUy2EFs": "/Adayar/Adyar-CLS-DMR",
+            "operationMetadataId": "0c7568ce-6390-4c99-a019-5893e941f191"
+          }
+        },
+        "Delay": {
+          "type": "Wait",
+          "inputs": {
+            "interval": {
+              "count": 1,
+              "unit": "Minute"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "16cfa429-1618-4439-b9fa-cd80848de350"
+          }
+        },
+        "Create_item_1": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+              "table": "9a8f03d4-f8c2-4b4b-bfa0-c2c09ff2562a",
+              "item/field_1": "@triggerBody()?['ID']",
+              "item/field_3": "@triggerBody()?['field_2']",
+              "item/field_4": "@triggerBody()?['field_3']",
+              "item/field_5": "@triggerBody()?['field_11']",
+              "item/field_6": "@triggerBody()?['field_12']",
+              "item/field_7": "@triggerBody()?['field_13']",
+              "item/field_8": "@triggerBody()?['field_14']",
+              "item/field_9": "@triggerBody()?['field_15']",
+              "item/field_10": "@triggerBody()?['field_16']",
+              "item/field_12": "@triggerBody()?['field_32']",
+              "item/field_13": "@triggerBody()?['field_48']",
+              "item/field_14": "@triggerBody()?['field_49']",
+              "item/field_15": "@{triggerBody()?['field_50']}",
+              "item/field_16": "@{triggerBody()?['field_51']}",
+              "item/field_17": "@triggerBody()?['field_52']",
+              "item/field_18": "@triggerBody()?['field_53']",
+              "item/field_19": "@triggerBody()?['field_54']",
+              "item/field_20": "@triggerBody()?['field_55']",
+              "item/field_21": "@triggerBody()?['field_56']",
+              "item/field_22": "@triggerBody()?['field_57']",
+              "item/field_23": "@triggerBody()?['field_58']",
+              "item/field_24": "@triggerBody()?['field_59']",
+              "item/field_25": "@triggerBody()?['field_60']",
+              "item/field_26": "@triggerBody()?['field_61']",
+              "item/field_27": "@triggerBody()?['Created']",
+              "item/field_28": "@triggerBody()?['field_62']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "PostItem",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "runAfter": {
+            "Delay": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "ef4e576f-9554-410f-baf5-75846ffd8930"
+          }
+        },
+        "Insert_row_1": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "15PbohwoAc2RvSb0Fcgud2B-SmJeQrbqOZT_ZyUy2EFs",
+              "table": "0",
+              "item/id": "@{triggerBody()?['ID']}",
+              "item/Workdate": "@triggerBody()?['field_2']",
+              "item/Supervisor": "@triggerBody()?['field_3']",
+              "item/ResourceTypr": "@triggerBody()?['field_11']",
+              "item/WorkerName": "@triggerBody()?['field_12']",
+              "item/ResourceQty": "@{triggerBody()?['field_13']}",
+              "item/ReClock": "@{triggerBody()?['field_14']}",
+              "item/ReRate": "@{triggerBody()?['field_15']}",
+              "item/ReAmount": "@{triggerBody()?['field_16']}",
+              "item/ReTotalAmount": "@{triggerBody()?['field_32']}",
+              "item/Olocation": "@triggerBody()?['field_48']",
+              "item/Ocomponent": "@triggerBody()?['field_49']",
+              "item/StChainage": "@{triggerBody()?['field_50']}",
+              "item/EndChainage": "@{triggerBody()?['field_51']}",
+              "item/Side": "@triggerBody()?['field_52']",
+              "item/TypeOfWork": "@triggerBody()?['field_53']",
+              "item/Grade": "@triggerBody()?['field_54']",
+              "item/ONumber": "@{triggerBody()?['field_55']}",
+              "item/OLength": "@{triggerBody()?['field_56']}",
+              "item/OBreadth": "@{triggerBody()?['field_57']}",
+              "item/ODepth": "@{triggerBody()?['field_58']}",
+              "item/ODia": "@triggerBody()?['field_59']",
+              "item/OWeight": "@{triggerBody()?['field_60']}",
+              "item/OQuantity": "@{triggerBody()?['field_61']}",
+              "item/Date": "@triggerBody()?['Created']",
+              "item/ODescription": "@triggerBody()?['field_62']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_googlesheet",
+              "operationId": "PostItem",
+              "connectionName": "shared_googlesheet-1"
+            }
+          },
+          "runAfter": {
+            "Create_item_1": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "15PbohwoAc2RvSb0Fcgud2B-SmJeQrbqOZT_ZyUy2EFs": "/Adayar/Adyar-CLS-DMR",
+            "operationMetadataId": "0e91d181-6b72-4df7-9af9-01b0ebeb3798"
+          }
+        },
+        "Delay_1": {
+          "type": "Wait",
+          "inputs": {
+            "interval": {
+              "count": 2,
+              "unit": "Minute"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "25d86167-abb0-4e99-8aab-4ddfdf11417b"
+          }
+        },
+        "Create_item_2": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+              "table": "9a8f03d4-f8c2-4b4b-bfa0-c2c09ff2562a",
+              "item/field_1": "@triggerBody()?['ID']",
+              "item/field_3": "@triggerBody()?['field_2']",
+              "item/field_4": "@triggerBody()?['field_3']",
+              "item/field_5": "@triggerBody()?['field_18']",
+              "item/field_6": "@triggerBody()?['field_19']",
+              "item/field_7": "@triggerBody()?['field_20']",
+              "item/field_8": "@triggerBody()?['field_21']",
+              "item/field_9": "@triggerBody()?['field_22']",
+              "item/field_10": "@triggerBody()?['field_23']",
+              "item/field_12": "@triggerBody()?['field_32']",
+              "item/field_13": "@triggerBody()?['field_63']",
+              "item/field_14": "@triggerBody()?['field_64']",
+              "item/field_15": "@{triggerBody()?['field_65']}",
+              "item/field_16": "@{triggerBody()?['field_66']}",
+              "item/field_17": "@triggerBody()?['field_67']",
+              "item/field_18": "@triggerBody()?['field_68']",
+              "item/field_19": "@triggerBody()?['field_69']",
+              "item/field_20": "@triggerBody()?['field_70']",
+              "item/field_21": "@triggerBody()?['field_71']",
+              "item/field_22": "@triggerBody()?['field_72']",
+              "item/field_23": "@triggerBody()?['field_73']",
+              "item/field_24": "@triggerBody()?['field_74']",
+              "item/field_25": "@triggerBody()?['field_75']",
+              "item/field_26": "@triggerBody()?['field_76']",
+              "item/field_27": "@triggerBody()?['Created']",
+              "item/field_28": "@triggerBody()?['field_77']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "PostItem",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "runAfter": {
+            "Delay_1": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2424b7d2-3b7c-42e7-b269-9ffb5714aec9"
+          }
+        },
+        "Insert_row_2": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "15PbohwoAc2RvSb0Fcgud2B-SmJeQrbqOZT_ZyUy2EFs",
+              "table": "0",
+              "item/id": "@{triggerBody()?['ID']}",
+              "item/Workdate": "@triggerBody()?['field_2']",
+              "item/Supervisor": "@triggerBody()?['field_3']",
+              "item/ResourceTypr": "@triggerBody()?['field_18']",
+              "item/WorkerName": "@triggerBody()?['field_19']",
+              "item/ResourceQty": "@{triggerBody()?['field_20']}",
+              "item/ReClock": "@{triggerBody()?['field_21']}",
+              "item/ReRate": "@{triggerBody()?['field_22']}",
+              "item/ReAmount": "@{triggerBody()?['field_23']}",
+              "item/ReTotalAmount": "@{triggerBody()?['field_32']}",
+              "item/Olocation": "@triggerBody()?['field_63']",
+              "item/Ocomponent": "@triggerBody()?['field_64']",
+              "item/StChainage": "@{triggerBody()?['field_65']}",
+              "item/EndChainage": "@{triggerBody()?['field_66']}",
+              "item/Side": "@triggerBody()?['field_67']",
+              "item/TypeOfWork": "@triggerBody()?['field_68']",
+              "item/Grade": "@triggerBody()?['field_69']",
+              "item/ONumber": "@{triggerBody()?['field_70']}",
+              "item/OLength": "@{triggerBody()?['field_71']}",
+              "item/OBreadth": "@{triggerBody()?['field_72']}",
+              "item/ODepth": "@{triggerBody()?['field_73']}",
+              "item/ODia": "@triggerBody()?['field_74']",
+              "item/OWeight": "@{triggerBody()?['field_75']}",
+              "item/OQuantity": "@{triggerBody()?['field_76']}",
+              "item/Date": "@triggerBody()?['Created']",
+              "item/ODescription": "@triggerBody()?['field_77']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_googlesheet",
+              "operationId": "PostItem",
+              "connectionName": "shared_googlesheet-1"
+            }
+          },
+          "runAfter": {
+            "Create_item_2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "15PbohwoAc2RvSb0Fcgud2B-SmJeQrbqOZT_ZyUy2EFs": "/Adayar/Adyar-CLS-DMR",
+            "operationMetadataId": "0ffd3207-5a39-48fb-b86d-d644c302b78b"
+          }
+        },
+        "Delay_2": {
+          "type": "Wait",
+          "inputs": {
+            "interval": {
+              "count": 3,
+              "unit": "Minute"
+            }
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "aae7134d-aeb3-46c0-8d93-2927d4a9ac57"
+          }
+        },
+        "Create_item_3": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+              "table": "9a8f03d4-f8c2-4b4b-bfa0-c2c09ff2562a",
+              "item/field_1": "@triggerBody()?['ID']",
+              "item/field_3": "@triggerBody()?['field_2']",
+              "item/field_4": "@triggerBody()?['field_3']",
+              "item/field_5": "@triggerBody()?['field_25']",
+              "item/field_6": "@triggerBody()?['field_26']",
+              "item/field_7": "@triggerBody()?['field_27']",
+              "item/field_8": "@triggerBody()?['field_28']",
+              "item/field_9": "@triggerBody()?['field_29']",
+              "item/field_10": "@triggerBody()?['field_30']",
+              "item/field_12": "@triggerBody()?['field_32']",
+              "item/field_13": "@triggerBody()?['field_78']",
+              "item/field_14": "@triggerBody()?['field_79']",
+              "item/field_15": "@{triggerBody()?['field_80']}",
+              "item/field_16": "@{triggerBody()?['field_81']}",
+              "item/field_17": "@triggerBody()?['field_82']",
+              "item/field_18": "@triggerBody()?['field_25']",
+              "item/field_19": "@triggerBody()?['field_84']",
+              "item/field_20": "@triggerBody()?['field_85']",
+              "item/field_21": "@triggerBody()?['field_86']",
+              "item/field_22": "@triggerBody()?['field_87']",
+              "item/field_23": "@triggerBody()?['field_88']",
+              "item/field_24": "@triggerBody()?['field_89']",
+              "item/field_25": "@triggerBody()?['field_90']",
+              "item/field_26": "@triggerBody()?['field_91']",
+              "item/field_27": "@triggerBody()?['Created']",
+              "item/field_28": "@triggerBody()?['field_92']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "PostItem",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "runAfter": {
+            "Delay_2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "91fd39d7-4f67-43e3-a1bb-7e5377656b2a"
+          }
+        },
+        "Insert_row_3": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "15PbohwoAc2RvSb0Fcgud2B-SmJeQrbqOZT_ZyUy2EFs",
+              "table": "0",
+              "item/id": "@{triggerBody()?['ID']}",
+              "item/Workdate": "@triggerBody()?['field_2']",
+              "item/Supervisor": "@triggerBody()?['field_3']",
+              "item/ResourceTypr": "@triggerBody()?['field_25']",
+              "item/WorkerName": "@triggerBody()?['field_26']",
+              "item/ResourceQty": "@{triggerBody()?['field_27']}",
+              "item/ReClock": "@{triggerBody()?['field_28']}",
+              "item/ReRate": "@{triggerBody()?['field_29']}",
+              "item/ReAmount": "@{triggerBody()?['field_30']}",
+              "item/ReTotalAmount": "@{triggerBody()?['field_32']}",
+              "item/Olocation": "@triggerBody()?['field_78']",
+              "item/Ocomponent": "@triggerBody()?['field_79']",
+              "item/StChainage": "@{triggerBody()?['field_80']}",
+              "item/EndChainage": "@{triggerBody()?['field_81']}",
+              "item/Side": "@triggerBody()?['field_82']",
+              "item/TypeOfWork": "@triggerBody()?['field_83']",
+              "item/Grade": "@triggerBody()?['field_84']",
+              "item/ONumber": "@{triggerBody()?['field_85']}",
+              "item/OLength": "@{triggerBody()?['field_86']}",
+              "item/OBreadth": "@{triggerBody()?['field_87']}",
+              "item/ODepth": "@{triggerBody()?['field_88']}",
+              "item/ODia": "@triggerBody()?['field_89']",
+              "item/OWeight": "@{triggerBody()?['field_90']}",
+              "item/OQuantity": "@{triggerBody()?['field_91']}",
+              "item/Date": "@triggerBody()?['Created']",
+              "item/ODescription": "@triggerBody()?['field_92']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_googlesheet",
+              "operationId": "PostItem",
+              "connectionName": "shared_googlesheet-1"
+            }
+          },
+          "runAfter": {
+            "Create_item_3": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "15PbohwoAc2RvSb0Fcgud2B-SmJeQrbqOZT_ZyUy2EFs": "/Adayar/Adyar-CLS-DMR",
+            "operationMetadataId": "a702f3ec-b61b-46e8-8351-fd0d1aeaf68d"
+          }
+        },
+        "Add_a_new_row_to_selected_environment": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "organization": "https://org24ae546a.crm8.dynamics.com",
+              "entityName": "new_adyarclsdmrfinals",
+              "item/new_newcolumn": "@triggerBody()?['ID']",
+              "item/new_date": "@triggerBody()?['Created']",
+              "item/new_endchainage": "@triggerBody()?['field_36']",
+              "item/new_grade": "@triggerBody()?['field_39']",
+              "item/new_id": "@triggerBody()?['ID']",
+              "item/new_obreadth": "@triggerBody()?['field_42']",
+              "item/new_ocomponent": "@triggerBody()?['field_34']",
+              "item/new_odepth": "@triggerBody()?['field_43']",
+              "item/new_odescription": "@triggerBody()?['field_47']",
+              "item/new_odia": "@triggerBody()?['field_44']",
+              "item/new_olength": "@triggerBody()?['field_41']",
+              "item/new_olocation": "@triggerBody()?['field_33']",
+              "item/new_onumber": "@triggerBody()?['field_40']",
+              "item/new_oquantity": "@triggerBody()?['field_46']",
+              "item/new_oweight": "@triggerBody()?['field_45']",
+              "item/new_reamount": "@triggerBody()?['field_9']",
+              "item/new_reclock": "@triggerBody()?['field_7']",
+              "item/new_rerate": "@triggerBody()?['field_8']",
+              "item/new_resourceqty": "@triggerBody()?['field_6']",
+              "item/new_resourcetype": "@triggerBody()?['field_4']",
+              "item/new_retotalamount": "@triggerBody()?['field_32']",
+              "item/new_side": "@triggerBody()?['field_37']",
+              "item/new_stchainage": "@triggerBody()?['field_35']",
+              "item/new_supervisor": "@triggerBody()?['field_3']",
+              "item/new_typeofwork": "@triggerBody()?['field_38']",
+              "item/new_workdate": "@triggerBody()?['field_2']",
+              "item/new_workername": "@triggerBody()?['field_5']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "CreateRecordWithOrganization",
+              "connectionName": "shared_commondataserviceforapps-1"
+            }
+          },
+          "runAfter": {
+            "Insert_row": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "a261d334-7c84-4bfa-aeab-e2639b7fb77b"
+          }
+        },
+        "Add_a_new_row_to_selected_environment_1": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "organization": "https://org24ae546a.crm8.dynamics.com",
+              "entityName": "new_adyarclsdmrfinals",
+              "item/new_newcolumn": "@triggerBody()?['ID']",
+              "item/new_date": "@triggerBody()?['Created']",
+              "item/new_endchainage": "@triggerBody()?['field_51']",
+              "item/new_grade": "@triggerBody()?['field_54']",
+              "item/new_id": "@triggerBody()?['ID']",
+              "item/new_obreadth": "@triggerBody()?['field_57']",
+              "item/new_ocomponent": "@triggerBody()?['field_49']",
+              "item/new_odepth": "@triggerBody()?['field_58']",
+              "item/new_odescription": "@triggerBody()?['field_62']",
+              "item/new_odia": "@triggerBody()?['field_59']",
+              "item/new_olength": "@triggerBody()?['field_56']",
+              "item/new_olocation": "@triggerBody()?['field_48']",
+              "item/new_onumber": "@triggerBody()?['field_55']",
+              "item/new_oquantity": "@triggerBody()?['field_61']",
+              "item/new_oweight": "@triggerBody()?['field_60']",
+              "item/new_reamount": "@triggerBody()?['field_16']",
+              "item/new_reclock": "@triggerBody()?['field_14']",
+              "item/new_rerate": "@triggerBody()?['field_15']",
+              "item/new_resourceqty": "@triggerBody()?['field_13']",
+              "item/new_resourcetype": "@triggerBody()?['field_11']",
+              "item/new_retotalamount": "@triggerBody()?['field_32']",
+              "item/new_side": "@triggerBody()?['field_52']",
+              "item/new_stchainage": "@triggerBody()?['field_50']",
+              "item/new_supervisor": "@triggerBody()?['field_3']",
+              "item/new_typeofwork": "@triggerBody()?['field_53']",
+              "item/new_workdate": "@triggerBody()?['field_2']",
+              "item/new_workername": "@triggerBody()?['field_12']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "CreateRecordWithOrganization",
+              "connectionName": "shared_commondataserviceforapps-1"
+            }
+          },
+          "runAfter": {
+            "Insert_row_1": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "bc28cd45-8893-4866-bff4-6189a5b3a77e"
+          }
+        },
+        "Add_a_new_row_to_selected_environment_2": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "organization": "https://org24ae546a.crm8.dynamics.com",
+              "entityName": "new_adyarclsdmrfinals",
+              "item/new_newcolumn": "@triggerBody()?['ID']",
+              "item/new_date": "@triggerBody()?['Created']",
+              "item/new_endchainage": "@triggerBody()?['field_66']",
+              "item/new_grade": "@triggerBody()?['field_69']",
+              "item/new_id": "@triggerBody()?['ID']",
+              "item/new_obreadth": "@triggerBody()?['field_72']",
+              "item/new_ocomponent": "@triggerBody()?['field_64']",
+              "item/new_odepth": "@triggerBody()?['field_73']",
+              "item/new_odescription": "@triggerBody()?['field_77']",
+              "item/new_odia": "@triggerBody()?['field_74']",
+              "item/new_olength": "@triggerBody()?['field_71']",
+              "item/new_olocation": "@triggerBody()?['field_63']",
+              "item/new_onumber": "@triggerBody()?['field_70']",
+              "item/new_oquantity": "@triggerBody()?['field_76']",
+              "item/new_oweight": "@triggerBody()?['field_75']",
+              "item/new_reamount": "@triggerBody()?['field_23']",
+              "item/new_reclock": "@triggerBody()?['field_21']",
+              "item/new_rerate": "@triggerBody()?['field_22']",
+              "item/new_resourceqty": "@triggerBody()?['field_20']",
+              "item/new_resourcetype": "@triggerBody()?['field_18']",
+              "item/new_retotalamount": "@triggerBody()?['field_32']",
+              "item/new_side": "@triggerBody()?['field_67']",
+              "item/new_stchainage": "@triggerBody()?['field_65']",
+              "item/new_supervisor": "@triggerBody()?['field_3']",
+              "item/new_typeofwork": "@triggerBody()?['field_68']",
+              "item/new_workdate": "@triggerBody()?['field_2']",
+              "item/new_workername": "@triggerBody()?['field_19']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "CreateRecordWithOrganization",
+              "connectionName": "shared_commondataserviceforapps-1"
+            }
+          },
+          "runAfter": {
+            "Insert_row_2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "01c55c58-b3f5-40ed-be7a-5c669fbb94a6"
+          }
+        },
+        "Add_a_new_row_to_selected_environment_3": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "organization": "https://org24ae546a.crm8.dynamics.com",
+              "entityName": "new_adyarclsdmrfinals",
+              "item/new_newcolumn": "@triggerBody()?['ID']",
+              "item/new_date": "@triggerBody()?['Created']",
+              "item/new_endchainage": "@triggerBody()?['field_81']",
+              "item/new_grade": "@triggerBody()?['field_84']",
+              "item/new_id": "@triggerBody()?['ID']",
+              "item/new_obreadth": "@triggerBody()?['field_87']",
+              "item/new_ocomponent": "@triggerBody()?['field_79']",
+              "item/new_odepth": "@triggerBody()?['field_88']",
+              "item/new_odescription": "@triggerBody()?['field_92']",
+              "item/new_odia": "@triggerBody()?['field_89']",
+              "item/new_olength": "@triggerBody()?['field_86']",
+              "item/new_olocation": "@triggerBody()?['field_78']",
+              "item/new_onumber": "@triggerBody()?['field_85']",
+              "item/new_oquantity": "@triggerBody()?['field_91']",
+              "item/new_oweight": "@triggerBody()?['field_90']",
+              "item/new_reamount": "@triggerBody()?['field_30']",
+              "item/new_reclock": "@triggerBody()?['field_28']",
+              "item/new_rerate": "@triggerBody()?['field_29']",
+              "item/new_resourceqty": "@triggerBody()?['field_27']",
+              "item/new_resourcetype": "@triggerBody()?['field_25']",
+              "item/new_retotalamount": "@triggerBody()?['field_32']",
+              "item/new_side": "@triggerBody()?['field_82']",
+              "item/new_stchainage": "@triggerBody()?['field_80']",
+              "item/new_supervisor": "@triggerBody()?['field_3']",
+              "item/new_typeofwork": "@triggerBody()?['field_83']",
+              "item/new_workdate": "@triggerBody()?['field_2']",
+              "item/new_workername": "@triggerBody()?['field_26']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "CreateRecordWithOrganization",
+              "connectionName": "shared_commondataserviceforapps-1"
+            }
+          },
+          "runAfter": {
+            "Insert_row_3": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "e97f3246-773a-4a4c-8c14-fe2096f5122f"
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

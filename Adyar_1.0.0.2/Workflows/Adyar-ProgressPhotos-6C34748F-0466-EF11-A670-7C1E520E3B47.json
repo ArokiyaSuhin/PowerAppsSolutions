@@ -1,0 +1,241 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "api": {
+          "name": "shared_sharepointonline"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "aro_sharedsharepointonline_c94ae"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_an_item_is_created": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+              "table": "a436f5fd-e182-40a8-8596-8b8dea6ac7f7"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "GetOnNewItems",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "recurrence": {
+            "interval": 1,
+            "frequency": "Minute"
+          },
+          "splitOn": "@triggerOutputs()?['body/value']",
+          "metadata": {
+            "operationMetadataId": "57792075-b37b-4971-8e7a-89811ad4449c"
+          }
+        }
+      },
+      "actions": {
+        "Get_attachments": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+              "table": "a436f5fd-e182-40a8-8596-8b8dea6ac7f7",
+              "itemId": "@triggerBody()?['ID']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "operationId": "GetItemAttachments",
+              "connectionName": "shared_sharepointonline"
+            }
+          },
+          "runAfter": {
+            "Initialize_variable_1": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "6bb4566c-4267-446e-ad07-82b92c50451b"
+          }
+        },
+        "For_each": {
+          "type": "Foreach",
+          "foreach": "@body('Get_attachments')",
+          "actions": {
+            "Update_item": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+                  "table": "a436f5fd-e182-40a8-8596-8b8dea6ac7f7",
+                  "id": "@triggerBody()?['ID']",
+                  "item/field_7": "<p>@{variables('var')}</p>",
+                  "item/field_8": "@variables('excelvar')"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "operationId": "PatchItem",
+                  "connectionName": "shared_sharepointonline"
+                }
+              },
+              "runAfter": {
+                "Append_to_string_variable_1": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "0f3963fe-f546-41d1-80cd-2015afbdb974"
+              }
+            },
+            "Append_to_string_variable": {
+              "type": "AppendToStringVariable",
+              "inputs": {
+                "name": "var",
+                "value": "<li><a href=\"@{item()?['AbsoluteUri']}\">@{item()?['DisplayName']}</a></li>"
+              },
+              "metadata": {
+                "operationMetadataId": "eb74a538-4b7b-43c0-bd68-76b1acc7f00d"
+              }
+            },
+            "Append_to_string_variable_1": {
+              "type": "AppendToStringVariable",
+              "inputs": {
+                "name": "excelvar",
+                "value": "@item()?['AbsoluteUri']"
+              },
+              "runAfter": {
+                "Append_to_string_variable": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "e36be329-0f70-4d92-9d4b-28da4e526c13"
+              }
+            }
+          },
+          "runAfter": {
+            "Get_attachments": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "dde1f488-7813-4f1a-ba90-7aa3bf1917ed"
+          }
+        },
+        "For_each_1": {
+          "type": "Foreach",
+          "foreach": "@body('Get_attachments')",
+          "actions": {
+            "Get_attachment_content": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+                  "table": "a436f5fd-e182-40a8-8596-8b8dea6ac7f7",
+                  "itemId": "@triggerBody()?['ID']",
+                  "attachmentId": "@items('For_each_1')?['Id']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "operationId": "GetAttachmentContent",
+                  "connectionName": "shared_sharepointonline"
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "56577448-598a-44b4-b145-3bddaf51e0d4"
+              }
+            },
+            "Create_file_copy_file": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "https://pandc2com.sharepoint.com/sites/Adyar",
+                  "folderPath": "/Document/Adyar-ProgressPhoto",
+                  "name": "@item()?['DisplayName']",
+                  "body": "@body('Get_attachment_content')"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "operationId": "CreateFile",
+                  "connectionName": "shared_sharepointonline"
+                }
+              },
+              "runAfter": {
+                "Get_attachment_content": [
+                  "Succeeded"
+                ]
+              },
+              "runtimeConfiguration": {
+                "contentTransfer": {
+                  "transferMode": "Chunked"
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "f0a6e4d3-af5d-40a6-8464-20ff4af1668b"
+              }
+            }
+          },
+          "runAfter": {
+            "Get_attachments": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "662e45aa-a955-4b31-add3-ad1c3ddb2f27"
+          }
+        },
+        "Initialize_variable": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "var",
+                "type": "string"
+              }
+            ]
+          },
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "b05744cb-8666-41c0-b6cb-d39e4748ef07"
+          }
+        },
+        "Initialize_variable_1": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "excelvar",
+                "type": "string"
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_variable": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "84a09998-b8aa-4c1c-966f-179aaec83fb0"
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
